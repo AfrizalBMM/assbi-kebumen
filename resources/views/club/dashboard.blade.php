@@ -8,7 +8,7 @@
     <div class="bg-white p-6 rounded-xl shadow">
         <h3 class="text-sm text-gray-500">Pemain</h3>
         <p class="text-3xl font-bold text-blue-900">
-            {{ auth()->user()->club->players()->count() }}
+            {{ auth()->user()->club->players()->count() ?? 0 }}
         </p>
     </div>
 

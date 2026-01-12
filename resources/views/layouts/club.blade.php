@@ -20,26 +20,32 @@
         <nav class="flex-1 p-4 space-y-2 text-sm">
 
             <a href="{{ route('club.dashboard') }}"
-               class="block px-4 py-2 rounded hover:bg-blue-800 transition">
+            class="block px-4 py-2 rounded hover:bg-blue-800 transition">
                 📊 Dashboard
             </a>
 
             <a href="{{ route('club.profile') }}"
-               class="block px-4 py-2 rounded hover:bg-blue-800 transition">
+            class="block px-4 py-2 rounded hover:bg-blue-800 transition">
                 📝 Profil Club
             </a>
 
             <a href="{{ route('club.players.index') }}"
-               class="block px-4 py-2 rounded hover:bg-blue-800 transition">
+            class="block px-4 py-2 rounded hover:bg-blue-800 transition">
                 👥 Data Pemain
             </a>
 
+            <a href="{{ route('club.lineups.index') }}"
+            class="block px-4 py-2 rounded hover:bg-blue-800 transition">
+                ⚽ Formasi
+            </a>
+
             <a href="{{ route('club.tournaments.index') }}"
-               class="block px-4 py-2 rounded hover:bg-blue-800 transition">
+            class="block px-4 py-2 rounded hover:bg-blue-800 transition">
                 🏆 Daftar Turnamen
             </a>
 
         </nav>
+
 
         {{-- Logout --}}
         <div class="p-4 border-t border-blue-800">
@@ -56,7 +62,7 @@
     <div class="flex-1 flex flex-col">
 
         {{-- TOP BAR --}}
-        <header class="bg-white shadow px-6 py-4 flex justify-between items-center">
+        <header class="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
             <h1 class="text-lg font-semibold text-blue-900">
                 @yield('page_title','Dashboard Club')
             </h1>
@@ -70,8 +76,10 @@
         </header>
 
         {{-- CONTENT --}}
-        <main class="p-6">
-            @yield('content')
+        <main class="flex-1 bg-gray-100 overflow-hidden">
+            <div class="w-full h-full overflow-auto px-6 py-4">
+                @yield('content')
+            </div>
         </main>
 
     </div>

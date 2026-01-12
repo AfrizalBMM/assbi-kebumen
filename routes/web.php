@@ -143,6 +143,9 @@ Route::middleware(['auth','status','role:admin'])
     Route::get('banners',[AdminBannerController::class,'index'])->name('banners.index');
     Route::post('banners/{banner}/approve',[AdminBannerController::class,'approve'])->name('banners.approve');
     Route::post('banners/{banner}/disable',[AdminBannerController::class,'disable'])->name('banners.disable');
+
+    Route::resource('banners',AdminBannerController::class)->except(['show']);
+
 });
 
 
@@ -154,7 +157,8 @@ Route::middleware(['auth','status','role:admin'])
 use App\Http\Controllers\Club\{
     ClubProfileController,
     ClubTournamentController,
-    PlayerController
+    PlayerController,
+    LineupController
 };
 
 Route::middleware(['auth','status','role:club'])
@@ -171,6 +175,15 @@ Route::middleware(['auth','status','role:club'])
     Route::post('tournaments/{tournament}/register',[ClubTournamentController::class,'register'])->name('tournaments.register');
 
     Route::resource('players',PlayerController::class);
+
+    Route::get('lineups',[LineupController::class,'index'])->name('lineups.index');
+    Route::get('lineups/{lineup}',[LineupController::class,'edit'])->name('lineups.edit');
+    Route::post('lineups',[LineupController::class,'store'])->name('lineups.store');
+    Route::post('lineups/{lineup}/submit',[LineupController::class,'submit'])->name('lineups.submit');
+
+    Route::post('lineups/{lineup}/save',[LineupController::class,'save'])
+    ->name('lineups.save');
+
 });
 
 
@@ -229,4 +242,19 @@ Route::middleware(['auth','status','role:eo'])
     Route::get('tournaments/{tournament}/banners',[BannerController::class,'index'])->name('tournaments.banners');
     Route::post('tournaments/{tournament}/banners',[BannerController::class,'store'])->name('tournaments.banners.store');
     Route::post('banners/{banner}/toggle',[BannerController::class,'toggle'])->name('banners.toggle');
+
+    //Formasi tiap Club
+    Route::get('lineups',[EOFormasiController::class,'index'])->name('eo.lineups.index');
+    Route::get('lineups/{lineup}',[EOFormasiController::class,'show'])->name('eo.lineups.show');
+    Route::post('lineups/{lineup}/approve',[EOFormasiController::class,'approve'])
+    ->name('eo.lineups.approve');
+    Route::post('lineups/{lineup}/request',[EOFormasiController::class,'requestRevision'])
+    ->name('eo.lineups.request');
+
+
+});
+
+
+Route::get('/gd', function(){
+    return phpinfo();
 });

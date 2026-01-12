@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Club;
 use App\Http\Controllers\Controller;
 use App\Models\Player;
 use Illuminate\Http\Request;
+use Intervention\Image\Laravel\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 
 class PlayerController extends Controller
 {
@@ -32,7 +34,16 @@ class PlayerController extends Controller
         ]);
 
         if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('players/photos', 'public');
+            $file = $request->file('photo');
+            $filename = uniqid().'.jpg';
+
+            $img = Image::read($file)
+                ->scale(400, 400)
+                ->toJpeg(70);
+
+            Storage::disk('public')->put('players/photos/'.$filename, $img);
+
+            $data['photo'] = 'players/photos/'.$filename;
         }
 
         if ($request->hasFile('document_pdf')) {
@@ -68,8 +79,18 @@ class PlayerController extends Controller
         ]);
 
         if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('players/photos', 'public');
+            $file = $request->file('photo');
+            $filename = uniqid().'.jpg';
+
+            $img = Image::read($file)
+                ->scale(400, 400)
+                ->toJpeg(70);
+
+            Storage::disk('public')->put('players/photos/'.$filename, $img);
+
+            $data['photo'] = 'players/photos/'.$filename;
         }
+
 
         if ($request->hasFile('document_pdf')) {
             $data['document_pdf'] = $request->file('document_pdf')->store('players/docs', 'public');
@@ -83,6 +104,17 @@ class PlayerController extends Controller
     public function destroy(Player $player)
     {
         $this->authorizeClub($player);
+
+        // Hapus file foto
+        if ($player->photo && Storage::disk('public')->exists($player->photo)) {
+            Storage::disk('public')->delete($player->photo);
+        }
+
+        // Hapus file dokumen
+        if ($player->document_pdf && Storage::disk('public')->exists($player->document_pdf)) {
+            Storage::disk('public')->delete($player->document_pdf);
+        }
+
         $player->delete();
 
         return back()->with('success', 'Pemain dihapus');

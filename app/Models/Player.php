@@ -34,5 +34,10 @@ class Player extends Model
         return $this->hasMany(\App\Models\MatchPlayerStat::class);
     }
 
+    public function lineups()
+    {
+        return $this->belongsToMany(Lineup::class,'lineup_players');
+    }
+
 
 }

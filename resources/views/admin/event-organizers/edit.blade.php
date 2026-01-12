@@ -1,48 +1,76 @@
 @extends('layouts.admin')
 @section('title','Edit Event Organizer')
+@section('page_title','Edit Event Organizer')
 
 @section('content')
 
-<h2 class="text-lg font-semibold mb-4">Edit Event Organizer</h2>
+<div class="max-w-4xl mx-auto">
+
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+
+<h2 class="text-xl font-bold text-slate-800 mb-6">
+    Edit Event Organizer
+</h2>
 
 <form method="POST"
-      action="{{ route('admin.event-organizers.update',$eo) }}"
-      class="bg-white p-6 rounded shadow max-w-xl">
-
+      action="{{ route('admin.event-organizers.update',$eo) }}">
 @csrf
 @method('PUT')
 
-<label class="text-sm">Nama EO</label>
-<input name="name"
-       value="{{ $eo->name }}"
-       class="w-full border px-3 py-2 mb-3" required>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-<label class="text-sm">Contact Person</label>
-<input name="contact_person"
-       value="{{ $eo->contact_person }}"
-       class="w-full border px-3 py-2 mb-3">
+    <div>
+        <label class="text-sm text-muted">Nama EO</label>
+        <input name="name"
+               value="{{ $eo->name }}"
+               class="w-full mt-1 border border-gray-200 rounded-lg px-4 py-2 focus:ring-primary focus:border-primary"
+               required>
+    </div>
 
-<label class="text-sm">Email</label>
-<input name="email"
-       value="{{ $eo->email }}"
-       class="w-full border px-3 py-2 mb-3">
+    <div>
+        <label class="text-sm text-muted">Contact Person</label>
+        <input name="contact_person"
+               value="{{ $eo->contact_person }}"
+               class="w-full mt-1 border border-gray-200 rounded-lg px-4 py-2 focus:ring-primary focus:border-primary">
+    </div>
 
-<label class="text-sm">Telepon</label>
-<input name="phone"
-       value="{{ $eo->phone }}"
-       class="w-full border px-3 py-2 mb-3">
+    <div>
+        <label class="text-sm text-muted">Email</label>
+        <input name="email"
+               value="{{ $eo->email }}"
+               class="w-full mt-1 border border-gray-200 rounded-lg px-4 py-2 focus:ring-primary focus:border-primary">
+    </div>
 
-<label class="text-sm">Alamat</label>
-<textarea name="address"
-          class="w-full border px-3 py-2 mb-3">{{ $eo->address }}</textarea>
+    <div>
+        <label class="text-sm text-muted">Telepon</label>
+        <input name="phone"
+               value="{{ $eo->phone }}"
+               class="w-full mt-1 border border-gray-200 rounded-lg px-4 py-2 focus:ring-primary focus:border-primary">
+    </div>
 
-<button class="bg-blue-600 text-white px-4 py-2 rounded">
-    Simpan
-</button>
+    <div class="md:col-span-2">
+        <label class="text-sm text-muted">Alamat</label>
+        <textarea name="address"
+                  rows="3"
+                  class="w-full mt-1 border border-gray-200 rounded-lg px-4 py-2 focus:ring-primary focus:border-primary">{{ $eo->address }}</textarea>
+    </div>
 
-<a href="{{ route('admin.event-organizers.show',$eo) }}"
-   class="ml-2 text-gray-600">Batal</a>
+</div>
+
+<div class="flex justify-end gap-3 mt-6">
+    <a href="{{ route('admin.event-organizers.show',$eo) }}"
+       class="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200">
+        Batal
+    </a>
+
+    <button class="px-5 py-2 rounded-lg bg-primary text-white font-semibold hover:bg-primary/90">
+        Simpan
+    </button>
+</div>
 
 </form>
+
+</div>
+</div>
 
 @endsection

@@ -16,7 +16,7 @@ class AdminClubController extends Controller
 
     public function show(Club $club)
     {
-        $club->load(['players','tournaments']);
+        $club = Club::with(['players','tournaments'])->findOrFail($club->id);
         return view('admin.clubs.show', compact('club'));
     }
 
@@ -43,14 +43,46 @@ class AdminClubController extends Controller
 
     public function suspend(Club $club)
     {
-        $club->update(['status'=>'suspended']);
-        return back()->with('success','Club disuspend');
+        \DB::transaction(function() use ($club) {
+
+            $club->update([
+                'status' => 'suspended'
+            ]);
+
+            if ($club->user) {
+                $club->user->update([
+                    'status' => 'suspended'
+                ]);
+            }
+
+        });
+
+        return back()->with('success','Club dan akun login disuspend');
     }
 
     public function activate(Club $club)
     {
-        $club->update(['status'=>'active']);
-        return back()->with('success','Club diaktifkan');
+        \DB::transaction(function() use ($club) {
+
+            // Aktifkan club
+            $club->update([
+                'status' => 'active'
+            ]);
+
+            // Aktifkan akun login club
+            if ($club->user) {
+                $club->user->update([
+                    'status' => 'active'
+                ]);
+            }
+
+        });
+
+        return redirect()
+            ->route('admin.clubs.show', $club->id)
+            ->with('success','Club dan akun login telah diaktifkan');
     }
+
+
 }
 

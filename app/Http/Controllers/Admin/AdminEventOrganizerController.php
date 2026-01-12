@@ -8,10 +8,17 @@ use Illuminate\Http\Request;
 
 class AdminEventOrganizerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $eventOrganizers = EventOrganizer::latest()->paginate(10);
-        return view('admin.event-organizers.index', compact('eventOrganizers'));
+        $status = $request->status;
+
+        $eos = EventOrganizer::when($status, function($q) use ($status){
+                $q->where('status',$status);
+            })
+            ->latest()
+            ->paginate(10);
+
+        return view('admin.event-organizers.index', compact('eos','status'));
     }
 
     public function show(EventOrganizer $eventOrganizer)

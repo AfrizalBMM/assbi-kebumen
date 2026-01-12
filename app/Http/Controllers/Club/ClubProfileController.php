@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Club;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Intervention\Image\Laravel\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 
 class ClubProfileController extends Controller
 {
@@ -18,21 +20,25 @@ class ClubProfileController extends Controller
         $club = auth()->user()->club;
 
         $data = $request->validate([
-            'name' => 'required',
-            'address' => 'nullable',
-            'phone' => 'nullable',
-            'email' => 'nullable|email',
-            'coach_name' => 'nullable',
-            'logo' => 'nullable|image',
-            'document' => 'nullable|mimes:pdf,zip'
+            'name'        => 'required',
+            'short_name'  => 'nullable',
+            'coach_name'  => 'required',
+            'coach_phone' => 'nullable',
+            'address'     => 'nullable',
+            'logo'        => 'nullable|image|max:2048',
         ]);
 
         if ($request->hasFile('logo')) {
-            $data['logo'] = $request->file('logo')->store('clubs/logos', 'public');
-        }
+            $file = $request->file('logo');
+            $filename = uniqid().'.jpg';
 
-        if ($request->hasFile('document')) {
-            $data['document'] = $request->file('document')->store('clubs/docs', 'public');
+            $img = Image::read($file)
+                ->scale(500, 500)
+                ->toJpeg(75);
+
+            Storage::disk('public')->put('clubs/logos/'.$filename, $img);
+
+            $data['logo'] = 'clubs/logos/'.$filename;
         }
 
         $club->update($data);
@@ -40,4 +46,3 @@ class ClubProfileController extends Controller
         return back()->with('success','Profil club diperbarui');
     }
 }
-

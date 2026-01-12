@@ -23,6 +23,8 @@ class User extends Authenticatable
         'password',
         'role',
         'status',
+        'club_id',
+        'event_organizer_id',
     ];
 
 
@@ -30,6 +32,7 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Club::class);
     }
+
 
     public function eventOrganizer()
     {

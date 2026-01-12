@@ -1,5 +1,82 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
+@layer base {
+    body {
+        @apply bg-background text-slate-900 font-sans;
+    }
+
+    h1, h2, h3, h4 {
+        @apply font-heading;
+    }
+}
+@layer components {
+
+  /* BUTTON */
+  .btn-primary {
+    @apply bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-900 transition;
+  }
+
+  .btn-success {
+    @apply bg-success text-white px-4 py-2 rounded-lg hover:bg-green-700 transition;
+  }
+
+  .btn-danger {
+    @apply bg-danger text-white px-4 py-2 rounded-lg hover:bg-red-700 transition;
+  }
+
+  .btn-ghost {
+    @apply text-primary px-3 py-2 rounded hover:bg-primarySoft transition;
+  }
+
+  /* CARD */
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-200;
+  }
+
+  .card-header {
+    @apply px-5 py-3 border-b bg-gray-50 font-semibold text-slate-700;
+  }
+
+  .card-body {
+    @apply p-5;
+  }
+
+  /* BADGE */
+  .badge {
+    @apply text-xs font-semibold px-3 py-1 rounded-full;
+  }
+
+  .badge-success {
+    @apply bg-successSoft text-success;
+  }
+
+  .badge-warning {
+    @apply bg-yellow-100 text-yellow-700;
+  }
+
+  .badge-danger {
+    @apply bg-dangerSoft text-danger;
+  }
+
+  /* TABLE */
+  .table {
+    @apply w-full text-sm text-slate-700;
+  }
+
+  .table th {
+    @apply px-4 py-3 text-xs uppercase text-muted bg-gray-50;
+  }
+
+  .table td {
+    @apply px-4 py-3 border-t;
+  }
+
+  .table tr:hover {
+    @apply bg-primarySoft;
+  }
+
+}
+
 @tailwind components;
 @tailwind utilities;
