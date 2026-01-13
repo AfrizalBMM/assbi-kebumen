@@ -13,9 +13,19 @@
     {{-- Sidebar --}}
     <aside class="w-64 bg-primary text-white flex flex-col shadow-lg">
 
-        <div class="p-5 text-xl font-bold border-b border-white/10">
-            🏟️ ASSBI ADMIN
+        <div class="p-4 flex items-center gap-3 border-b border-white/10">
+            <img
+                src="{{ asset('assets/logo-assbi.png') }}"
+                alt="ASSBI Logo"
+                class="w-10 h-10 object-contain"
+            >
+
+            <div class="leading-tight">
+                <div class="text-lg font-bold">ASSBI</div>
+                <div class="text-xs text-white/70">ADMIN PANEL</div>
+            </div>
         </div>
+
 
         <nav class="flex-1 p-4 space-y-1 text-sm">
 
@@ -67,15 +77,6 @@
 
         </nav>
 
-        {{-- Logout --}}
-        <div class="p-4 border-t border-white/10">
-            <form method="POST" action="/logout">
-                @csrf
-                <button class="w-full bg-danger text-white py-2 rounded-lg text-sm hover:bg-danger/90 transition">
-                    Logout
-                </button>
-            </form>
-        </div>
     </aside>
 
     {{-- Main --}}
@@ -87,12 +88,29 @@
                 @yield('page_title','Dashboard')
             </h1>
 
-            <div class="flex items-center gap-3 text-sm text-muted">
-                <span>{{ auth()->user()->name }}</span>
-                <span class="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">
+        <div class="flex items-center gap-4 text-sm">
+
+            <div class="text-right">
+                <div class="font-semibold text-gray-700">
+                    {{ auth()->user()->name }}
+                </div>
+                <div class="text-xs text-gray-400">
                     ADMIN
-                </span>
+                </div>
             </div>
+
+            <form method="POST" action="/logout">
+                @csrf
+                <button
+                    type="submit"
+                    class="flex items-center gap-2 px-4 py-2 rounded-lg bg-danger text-white hover:bg-danger/90 transition text-sm"
+                >
+                Logout
+                </button>
+            </form>
+
+        </div>
+
         </header>
 
         {{-- Content --}}
