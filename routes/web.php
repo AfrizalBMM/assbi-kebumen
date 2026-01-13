@@ -158,6 +158,7 @@ use App\Http\Controllers\Club\{
     ClubProfileController,
     ClubTournamentController,
     PlayerController,
+    ClubDashboardController,
     LineupController
 };
 
@@ -166,7 +167,7 @@ Route::middleware(['auth','status','role:club'])
 ->name('club.')
 ->group(function(){
 
-    Route::get('/dashboard', fn()=>view('club.dashboard'))->name('dashboard');
+    Route::get('/dashboard',[ClubDashboardController::class,'index'])->name('dashboard');
 
     Route::get('/profile',[ClubProfileController::class,'edit'])->name('profile');
     Route::put('/profile',[ClubProfileController::class,'update'])->name('profile.update');

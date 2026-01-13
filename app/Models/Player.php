@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Services\KtaGenerator;
 
 class Player extends Model
 {
@@ -18,6 +19,27 @@ class Player extends Model
         'nik',
         'status',
     ];
+
+    // 🔥 AUTO GENERATE KTA
+    protected static function booted()
+    {
+        static::created(function ($player) {
+            KtaGenerator::generate($player);
+        });
+
+        static::updated(function ($player) {
+            if ($player->wasChanged([
+                'name',
+                'birth_date',
+                'birth_place',
+                'photo',
+                'position',
+                'club_id'
+            ])) {
+                KtaGenerator::generate($player);
+            }
+        });
+    }
 
     public function club()
     {
@@ -38,6 +60,4 @@ class Player extends Model
     {
         return $this->belongsToMany(Lineup::class,'lineup_players');
     }
-
-
 }

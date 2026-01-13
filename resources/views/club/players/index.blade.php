@@ -86,14 +86,27 @@
 
             {{-- Aksi --}}
             <td class="px-4 py-3 text-right space-x-2">
+
+                @if($p->kta_path)
+                    <a href="{{ asset('storage/'.$p->kta_path) }}"
+                    target="_blank"
+                    class="inline-flex items-center px-3 py-1.5 text-xs rounded bg-green-100 text-green-700 hover:bg-green-200 transition">
+                        KTA
+                    </a>
+                @else
+                    <span class="inline-flex items-center px-3 py-1.5 text-xs rounded bg-gray-100 text-gray-400">
+                        KTA -
+                    </span>
+                @endif
+
                 <a href="{{ route('club.players.edit',$p) }}"
-                   class="inline-flex items-center px-3 py-1.5 text-xs rounded bg-blue-100 text-blue-700 hover:bg-blue-200 transition">
+                class="inline-flex items-center px-3 py-1.5 text-xs rounded bg-blue-100 text-blue-700 hover:bg-blue-200 transition">
                     Edit
                 </a>
 
                 <form method="POST"
-                      action="{{ route('club.players.destroy',$p) }}"
-                      class="inline">
+                    action="{{ route('club.players.destroy',$p) }}"
+                    class="inline">
                     @csrf
                     @method('DELETE')
                     <button onclick="return confirm('Hapus pemain?')"
@@ -101,7 +114,9 @@
                         Hapus
                     </button>
                 </form>
+
             </td>
+
 
         </tr>
     @endforeach

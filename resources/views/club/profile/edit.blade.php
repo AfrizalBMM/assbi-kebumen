@@ -41,9 +41,10 @@
         {{-- PANEL KANAN --}}
         <div class="lg:col-span-3 bg-white p-8 rounded-xl shadow">
 
-            <form method="POST"
-                  action="{{ route('club.profile.update') }}"
-                  enctype="multipart/form-data">
+            <form id="clubProfileForm"
+                method="POST"
+                action="{{ route('club.profile.update') }}"
+                enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -52,36 +53,36 @@
                     <div>
                         <label class="block text-sm">Nama Club</label>
                         <input name="name"
-                               value="{{ old('name',$club->name) }}"
-                               class="w-full border px-3 py-2 rounded">
+                            value="{{ old('name',$club->name) }}"
+                            class="w-full border px-3 py-2 rounded">
                     </div>
 
                     <div>
                         <label class="block text-sm">Nama Singkat</label>
                         <input name="short_name"
-                               value="{{ old('short_name',$club->short_name) }}"
-                               class="w-full border px-3 py-2 rounded">
+                            value="{{ old('short_name',$club->short_name) }}"
+                            class="w-full border px-3 py-2 rounded">
                     </div>
 
                     <div>
                         <label class="block text-sm">Nama Pelatih</label>
                         <input name="coach_name"
-                               value="{{ old('coach_name',$club->coach_name) }}"
-                               class="w-full border px-3 py-2 rounded">
+                            value="{{ old('coach_name',$club->coach_name) }}"
+                            class="w-full border px-3 py-2 rounded">
                     </div>
 
                     <div>
                         <label class="block text-sm">No. HP Pelatih</label>
                         <input name="coach_phone"
-                               value="{{ old('coach_phone',$club->coach_phone) }}"
-                               class="w-full border px-3 py-2 rounded">
+                            value="{{ old('coach_phone',$club->coach_phone) }}"
+                            class="w-full border px-3 py-2 rounded">
                     </div>
 
                     <div class="md:col-span-2">
                         <label class="block text-sm">Alamat</label>
                         <textarea name="address"
-                                  class="w-full border px-3 py-2 rounded"
-                                  rows="3">{{ old('address',$club->address) }}</textarea>
+                                class="w-full border px-3 py-2 rounded"
+                                rows="3">{{ old('address',$club->address) }}</textarea>
                     </div>
 
                     <div class="md:col-span-2">
@@ -91,8 +92,15 @@
 
                 </div>
 
-                <div class="mt-6">
-                    <button class="bg-blue-600 text-white px-6 py-2 rounded">
+                <!-- BUTTON -->
+                <div class="mt-6 flex justify-end">
+                    <button type="button"
+                        onclick="confirmAction(
+                            'Simpan perubahan profil club ini?',
+                            'warning',
+                            ()=> document.getElementById('clubProfileForm').submit()
+                        )"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded shadow">
                         Simpan Perubahan
                     </button>
                 </div>

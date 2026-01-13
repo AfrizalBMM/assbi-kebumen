@@ -2,6 +2,31 @@
 @section('title','Edit Pemain')
 
 @section('content')
+
+@if($player->kta_path)
+<div class="mb-4 p-4 bg-gray-50 border rounded-lg flex items-center gap-4">
+
+    <img src="{{ asset('storage/'.$player->kta_path) }}"
+         class="h-40 border rounded shadow">
+
+    <div>
+        <div class="font-semibold text-gray-700">
+            Nomor KTA
+        </div>
+        <div class="text-sm text-gray-600 mb-2">
+            {{ $player->kta_number }}
+        </div>
+
+        <a href="{{ asset('storage/'.$player->kta_path) }}"
+           target="_blank"
+           class="inline-block bg-green-600 text-white px-4 py-2 rounded text-sm">
+            Download KTA
+        </a>
+    </div>
+
+</div>
+@endif
+
 <form method="POST"
       action="{{ route('club.players.update',$player) }}"
       enctype="multipart/form-data"
