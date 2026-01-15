@@ -78,11 +78,11 @@
                     </td>
 
                     <td class="px-6 py-3 text-muted">
-                        {{ class_basename($log->model_type) }}
+                        {{ class_basename($log->target_type) }}
                     </td>
 
                     <td class="px-6 py-3 text-center text-muted">
-                        {{ $log->ip_address }}
+                        {{ $log->ip_address ?? '-' }}
                     </td>
                 </tr>
             @endforeach

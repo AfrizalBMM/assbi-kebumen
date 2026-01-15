@@ -7,6 +7,7 @@ use App\Models\Player;
 use Illuminate\Http\Request;
 use Intervention\Image\Laravel\Facades\Image;
 use Illuminate\Support\Facades\Storage;
+use App\Services\KtaGenerator;
 
 class PlayerController extends Controller
 {
@@ -22,41 +23,44 @@ class PlayerController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'birth_date' => 'required|date',
-            'birth_place' => 'required|string|max:255',
-            'position' => 'required|in:GK,DF,MF,FW',
-            'photo' => 'nullable|image|max:2048',
-            'document_pdf' => 'nullable|mimes:pdf|max:2048',
-            'nik' => 'nullable|string|max:50',
-        ]);
+{
+    $data = $request->validate([
+        'name' => 'required|string|max:255',
+        'birth_date' => 'required|date',
+        'birth_place' => 'required|string|max:255',
+        'position' => 'required|in:GK,DF,MF,FW',
+        'photo' => 'nullable|image|max:1024', // 1MB
+        'document_pdf' => 'nullable|mimes:pdf|max:2048',
+        'nik' => 'nullable|string|max:50',
+    ]);
 
-        if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $filename = uniqid().'.jpg';
+    if ($request->hasFile('photo')) {
+        $file = $request->file('photo');
+        $filename = uniqid().'.jpg';
 
-            $img = Image::read($file)
-                ->scale(400, 400)
-                ->toJpeg(70);
+        $img = Image::read($file->getRealPath())
+            ->cover(400, 400)
+            ->toJpeg(70);
 
-            Storage::disk('public')->put('players/photos/'.$filename, $img);
-
-            $data['photo'] = 'players/photos/'.$filename;
-        }
-
-        if ($request->hasFile('document_pdf')) {
-            $data['document_pdf'] = $request->file('document_pdf')->store('players/docs', 'public');
-        }
-
-        $data['club_id'] = auth()->user()->club_id;
-
-        Player::create($data);
-
-        return redirect()->route('club.players.index')
-            ->with('success', 'Pemain ditambahkan');
+        Storage::disk('public')->put('players/photos/'.$filename, $img);
+        $data['photo'] = 'players/photos/'.$filename;
     }
+
+    if ($request->hasFile('document_pdf')) {
+        $data['document_pdf'] = $request->file('document_pdf')->store('players/docs', 'public');
+    }
+
+    $data['club_id'] = auth()->user()->club_id;
+
+    $player = Player::create($data);
+
+    logActivity('create', $player, 'Menambah pemain '.$player->name);
+
+    return redirect()->route('club.players.index')
+        ->with('success', 'Pemain ditambahkan');
+}
+
+
 
     public function edit(Player $player)
     {
@@ -73,7 +77,7 @@ class PlayerController extends Controller
             'birth_date' => 'required|date',
             'birth_place' => 'required|string|max:255',
             'position' => 'required|in:GK,DF,MF,FW',
-            'photo' => 'nullable|image|max:2048',
+            'photo' => 'nullable|image|max:1024', // 1MB
             'document_pdf' => 'nullable|mimes:pdf|max:2048',
             'nik' => 'nullable|string|max:50',
         ]);
@@ -82,21 +86,26 @@ class PlayerController extends Controller
             $file = $request->file('photo');
             $filename = uniqid().'.jpg';
 
-            $img = Image::read($file)
+            $img = Image::read($file->getRealPath())
                 ->scale(400, 400)
                 ->toJpeg(70);
 
             Storage::disk('public')->put('players/photos/'.$filename, $img);
-
             $data['photo'] = 'players/photos/'.$filename;
         }
-
 
         if ($request->hasFile('document_pdf')) {
             $data['document_pdf'] = $request->file('document_pdf')->store('players/docs', 'public');
         }
 
         $player->update($data);
+
+        // 🧾 LOG
+        logActivity(
+            'update',
+            $player,
+            'Memperbarui data pemain '.$player->name
+        );
 
         return back()->with('success', 'Pemain diperbarui');
     }
@@ -105,12 +114,17 @@ class PlayerController extends Controller
     {
         $this->authorizeClub($player);
 
-        // Hapus file foto
+        // 🧾 LOG dulu sebelum dihapus
+        logActivity(
+            'delete',
+            $player,
+            'Menghapus pemain '.$player->name
+        );
+
         if ($player->photo && Storage::disk('public')->exists($player->photo)) {
             Storage::disk('public')->delete($player->photo);
         }
 
-        // Hapus file dokumen
         if ($player->document_pdf && Storage::disk('public')->exists($player->document_pdf)) {
             Storage::disk('public')->delete($player->document_pdf);
         }
@@ -118,6 +132,19 @@ class PlayerController extends Controller
         $player->delete();
 
         return back()->with('success', 'Pemain dihapus');
+    }
+
+    public function generateKta(Player $player)
+    {
+        $this->authorizeClub($player);
+
+        try {
+            \App\Services\KtaGenerator::generate($player);
+        } catch (\Throwable $e) {
+            return back()->withErrors('Gagal generate KTA: '.$e->getMessage());
+        }
+
+        return back()->with('success','KTA berhasil digenerate');
     }
 
     private function authorizeClub(Player $player)

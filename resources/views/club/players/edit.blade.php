@@ -3,7 +3,8 @@
 
 @section('content')
 
-@if($player->kta_path)
+ @if($player->kta_path)
+
 <div class="mb-4 p-4 bg-gray-50 border rounded-lg flex items-center gap-4">
 
     <img src="{{ asset('storage/'.$player->kta_path) }}"
@@ -13,6 +14,7 @@
         <div class="font-semibold text-gray-700">
             Nomor KTA
         </div>
+
         <div class="text-sm text-gray-600 mb-2">
             {{ $player->kta_number }}
         </div>
@@ -25,6 +27,22 @@
     </div>
 
 </div>
+
+@else
+
+<div class="mb-4 p-4 bg-yellow-50 border border-yellow-300 rounded-lg text-sm text-yellow-800">
+    KTA belum tersedia.
+</div>
+
+@if($player->photo)
+<form method="POST" action="{{ route('club.players.generateKta',$player) }}">
+    @csrf
+    <button class="bg-blue-600 text-white px-4 py-2 rounded">
+        Generate KTA
+    </button>
+</form>
+@endif
+
 @endif
 
 <form method="POST"

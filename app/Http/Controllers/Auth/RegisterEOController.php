@@ -53,8 +53,16 @@ class RegisterEOController extends Controller
             'status'  => 'pending',
         ]);
 
+        // 🧾 3️⃣ Catat ke Activity Log
+        logActivity(
+            'register',
+            $eo,
+            'EO '.$eo->name.' mendaftar ke sistem'
+        );
+
         return redirect()->route('register.success')
-            ->with('success', 'Registrasi club berhasil. Menunggu verifikasi admin.');
+            ->with('success', 'Registrasi EO berhasil. Menunggu verifikasi admin.');
+
     }
 
 }

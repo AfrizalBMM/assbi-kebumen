@@ -29,11 +29,6 @@
            class="w-full sm:w-auto px-5 py-3 rounded-lg bg-blue-700 text-white hover:bg-blue-800 transition text-center">
             🏠 Web Utama
         </a>
-
-        <button onclick="history.back()"
-                class="w-full sm:w-auto px-5 py-3 rounded-lg border border-gray-300 hover:bg-gray-100 transition">
-            🔙 Kembali
-        </button>
     </div>
 
 </div>

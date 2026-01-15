@@ -17,11 +17,18 @@ class AdminActivityController extends Controller
         }
 
         if ($request->search) {
-            $query->where('description','like','%'.$request->search.'%');
+            $query->where(function($q) use ($request) {
+                $q->where('description', 'like', '%'.$request->search.'%')
+                ->orWhere('action', 'like', '%'.$request->search.'%')
+                ->orWhereHas('user', function($u) use ($request) {
+                        $u->where('name', 'like', '%'.$request->search.'%');
+                });
+            });
         }
 
         $logs = $query->paginate(30);
 
         return view('admin.activity.index', compact('logs'));
     }
+
 }

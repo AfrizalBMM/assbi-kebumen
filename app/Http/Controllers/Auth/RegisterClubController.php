@@ -56,7 +56,7 @@ class RegisterClubController extends Controller
         ]);
 
         // 2️⃣ Buat User login club
-        \App\Models\User::create([
+        $user = \App\Models\User::create([
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => \Illuminate\Support\Facades\Hash::make($request->password),
@@ -64,6 +64,13 @@ class RegisterClubController extends Controller
             'status'   => 'pending',
             'club_id'  => $club->id,
         ]);
+
+        // 🧾 3️⃣ Catat ke Activity Log
+        logActivity(
+            'register',
+            $club,
+            'Club '.$club->name.' mendaftar ke sistem'
+        );
 
         return redirect()->route('register.success')
             ->with('success', 'Registrasi club berhasil. Menunggu verifikasi admin.');

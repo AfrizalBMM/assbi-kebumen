@@ -99,6 +99,7 @@
                     <th class="px-6 py-3 text-left">Nama</th>
                     <th class="px-6 py-3 text-center">Posisi</th>
                     <th class="px-6 py-3 text-center">Tanggal Lahir</th>
+                    <th class="px-6 py-3 text-center">Usia</th>
                 </tr>
             </thead>
             <tbody class="divide-y">
@@ -116,6 +117,11 @@
 
                     <td class="px-6 py-3 text-center text-muted">
                         {{ \Carbon\Carbon::parse($p->birth_date)->format('d M Y') }}
+                    </td>
+                    <td class="px-6 py-3 text-center">
+                        <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold">
+                            {{ \Carbon\Carbon::parse($p->birth_date)->age }} TH
+                        </span>
                     </td>
                 </tr>
                 @endforeach

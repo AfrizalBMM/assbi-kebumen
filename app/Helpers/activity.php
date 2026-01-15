@@ -2,14 +2,16 @@
 
 use App\Models\ActivityLog;
 
-function logActivity($action,$targetType,$targetId=null,$desc=null)
+function logActivity($action, $target = null, $description = null)
 {
     ActivityLog::create([
-        'user_id'=>auth()->id(),
-        'role'=>auth()->user()->role ?? 'system',
-        'action'=>$action,
-        'target_type'=>$targetType,
-        'target_id'=>$targetId,
-        'description'=>$desc
+        'user_id' => auth()->id(),
+        'role' => auth()->user()->role ?? 'system',
+        'action' => $action,
+        'target_type' => $target ? get_class($target) : null,
+        'target_id' => $target->id ?? null,
+        'description' => $description,
+        'ip_address' => request()->ip()
     ]);
 }
+

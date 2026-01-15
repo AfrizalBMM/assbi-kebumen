@@ -20,27 +20,6 @@ class Player extends Model
         'status',
     ];
 
-    // 🔥 AUTO GENERATE KTA
-    protected static function booted()
-    {
-        static::created(function ($player) {
-            KtaGenerator::generate($player);
-        });
-
-        static::updated(function ($player) {
-            if ($player->wasChanged([
-                'name',
-                'birth_date',
-                'birth_place',
-                'photo',
-                'position',
-                'club_id'
-            ])) {
-                KtaGenerator::generate($player);
-            }
-        });
-    }
-
     public function club()
     {
         return $this->belongsTo(Club::class);

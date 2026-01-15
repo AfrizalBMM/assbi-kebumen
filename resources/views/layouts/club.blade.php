@@ -2,9 +2,15 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">  <!-- 🔥 WAJIB -->
     <title>@yield('title','Club ASSBI')</title>
+
     @vite(['resources/css/app.css','resources/js/app.js'])
+
+    <link href="https://unpkg.com/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/cropperjs@1.6.2/dist/cropper.min.js"></script>
 </head>
+
 
 <body class="bg-gray-100 font-sans">
 
@@ -29,6 +35,10 @@
             <a href="{{ route('club.dashboard') }}" class="block px-4 py-2 rounded hover:bg-blue-800">📊 Dashboard</a>
             <a href="{{ route('club.profile') }}" class="block px-4 py-2 rounded hover:bg-blue-800">📝 Profil Club</a>
             <a href="{{ route('club.players.index') }}" class="block px-4 py-2 rounded hover:bg-blue-800">👥 Data Pemain</a>
+            <a href="{{ route('club.kta-backgrounds.index') }}"
+            class="block px-4 py-2 rounded hover:bg-blue-800">
+                🎴 Background KTA
+            </a>
             <a href="{{ route('club.lineups.index') }}" class="block px-4 py-2 rounded hover:bg-blue-800">⚽ Formasi</a>
             <a href="{{ route('club.tournaments.index') }}" class="block px-4 py-2 rounded hover:bg-blue-800">🏆 Daftar Turnamen</a>
         </nav>
@@ -136,6 +146,6 @@ function closeConfirm(){
     document.getElementById('confirmModal').classList.add('hidden');
 }
 </script>
-
+@stack('scripts')
 </body>
 </html>

@@ -42,11 +42,19 @@ class ClubTournamentController extends Controller
             return back()->withErrors('Ada pemain tidak sesuai kategori usia');
         }
 
-        TournamentRegistration::create([
+        $reg = TournamentRegistration::create([
             'tournament_id' => $tournament->id,
             'club_id' => $club->id
         ]);
 
+        // 🧾 ACTIVITY LOG
+        logActivity(
+            'register',
+            $tournament,
+            'Club '.$club->name.' mendaftar ke turnamen '.$tournament->name
+        );
+
         return back()->with('success','Berhasil mendaftar');
     }
+
 }

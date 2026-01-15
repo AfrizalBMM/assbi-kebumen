@@ -18,10 +18,12 @@
 
         {{-- PANEL KIRI --}}
         <div class="bg-white p-6 rounded-xl shadow flex flex-col items-center">
-            <div class="text-center">
+            <div class="text-center w-full">
+
+                {{-- Logo --}}
                 @if($club->logo)
                     <img src="{{ asset('storage/'.$club->logo) }}"
-                         class="w-32 h-32 mx-auto rounded-full object-cover">
+                        class="w-32 h-32 mx-auto rounded-full object-cover shadow">
                 @else
                     <div class="w-32 h-32 mx-auto bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
                         LOGO
@@ -31,12 +33,53 @@
                 <h3 class="mt-4 text-lg font-semibold">{{ $club->name }}</h3>
                 <p class="text-sm text-gray-500">{{ $club->short_name }}</p>
 
-                <span class="inline-block mt-2 px-3 py-1 text-xs rounded
+                {{-- Status --}}
+                <span class="inline-block mt-2 px-3 py-1 text-xs rounded-full font-semibold
                     {{ $club->status=='active' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
                     {{ ucfirst($club->status) }}
                 </span>
+
+                {{-- Upload Logo --}}
+                <div class="mt-5 w-full">
+                    <label class="block text-xs font-semibold text-gray-500 mb-2">
+                        Ganti Logo Club
+                    </label>
+
+                    <div class="flex flex-col items-center">
+
+                        {{-- Preview --}}
+                        <img id="logoPreview"
+                            src="{{ $club->logo ? asset('storage/'.$club->logo) : '' }}"
+                            class="w-24 h-24 rounded-full object-cover shadow mb-3
+                                    {{ $club->logo ? '' : 'hidden' }}">
+
+                        <label class="cursor-pointer inline-flex items-center gap-2
+                                    px-4 py-2 rounded-lg bg-blue-50 text-blue-700
+                                    hover:bg-blue-100 transition text-xs font-semibold">
+
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M5 12h14M12 5v14"/>
+                            </svg>
+
+                            Pilih Logo
+
+                            <input type="file" name="logo" form="clubProfileForm"
+                                accept="image/*"
+                                class="hidden"
+                                onchange="previewLogo(event)">
+                        </label>
+
+                        <span id="logoFilename" class="mt-2 text-gray-500">
+                            JPG / PNG, max 2MB
+                        </span>
+                    </div>
+                </div>
+
             </div>
         </div>
+
 
         {{-- PANEL KANAN --}}
         <div class="lg:col-span-3 bg-white p-8 rounded-xl shadow">
@@ -85,11 +128,6 @@
                                 rows="3">{{ old('address',$club->address) }}</textarea>
                     </div>
 
-                    <div class="md:col-span-2">
-                        <label class="block text-sm">Logo Club</label>
-                        <input type="file" name="logo">
-                    </div>
-
                 </div>
 
                 <!-- BUTTON -->
@@ -112,5 +150,23 @@
     </div>
 
 </div>
+
+<script>
+function previewLogo(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    document.getElementById('logoFilename').innerText = file.name;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = document.getElementById('logoPreview');
+        img.src = e.target.result;
+        img.classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+}
+</script>
+
 
 @endsection

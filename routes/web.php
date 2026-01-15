@@ -146,6 +146,8 @@ Route::middleware(['auth','status','role:admin'])
 
     Route::resource('banners',AdminBannerController::class)->except(['show']);
 
+    Route::resource('admin/kta-backgrounds', AdminKtaBackgroundController::class);
+
 });
 
 
@@ -159,7 +161,8 @@ use App\Http\Controllers\Club\{
     ClubTournamentController,
     PlayerController,
     ClubDashboardController,
-    LineupController
+    LineupController,
+    ClubKtaBackgroundController
 };
 
 Route::middleware(['auth','status','role:club'])
@@ -184,6 +187,10 @@ Route::middleware(['auth','status','role:club'])
 
     Route::post('lineups/{lineup}/save',[LineupController::class,'save'])
     ->name('lineups.save');
+
+    Route::resource('kta-backgrounds', ClubKtaBackgroundController::class);
+    Route::post('players/{player}/generate-kta', [PlayerController::class,'generateKta'])
+    ->name('players.generateKta');
 
 });
 

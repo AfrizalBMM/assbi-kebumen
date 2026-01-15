@@ -43,6 +43,14 @@ class ClubProfileController extends Controller
 
         $club->update($data);
 
+        // 🧾 ACTIVITY LOG
+        logActivity(
+            'update',
+            $club,
+            'Memperbarui profil club '.$club->name
+        );
+
         return back()->with('success','Profil club diperbarui');
     }
+
 }
