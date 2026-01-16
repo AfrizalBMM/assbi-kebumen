@@ -50,7 +50,10 @@ class ClubProfileController extends Controller
             'Memperbarui profil club '.$club->name
         );
 
-        return back()->with('success','Profil club diperbarui');
+        return redirect()
+            ->route('club.profile')
+            ->with('success','Profil club berhasil diperbarui');
+
     }
 
 }

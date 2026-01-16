@@ -45,7 +45,7 @@
     </aside>
 
     <!-- MAIN AREA -->
-    <div class="flex-1 flex flex-col md:ml-64">
+    <div class="flex-1 flex flex-col">
 
         <!-- TOP BAR -->
         <header class="bg-white border-b px-4 py-3 flex justify-between items-center sticky top-0 z-20">

@@ -59,8 +59,11 @@ use App\Http\Controllers\Auth\RegisterEOController;
 Route::get('/register/club', [RegisterClubController::class,'create'])->name('register.club');
 Route::post('/register/club', [RegisterClubController::class,'store'])->name('register.club.store');
 
-Route::get('/register/eo', [RegisterEOController::class,'create'])->name('register.eo');
-Route::post('/register/eo', [RegisterEOController::class,'store'])->name('register.eo.store');
+Route::get('/register/eo',[RegisterEOController::class,'create'])
+    ->name('register.eo');
+
+Route::post('/register/eo',[RegisterEOController::class,'store'])
+    ->name('register.eo.store');
 
 Route::get('/register/success', function () {
     return view('auth.register-success');
@@ -97,56 +100,142 @@ use App\Http\Controllers\Admin\{
 };
 
 Route::middleware(['auth','status','role:admin'])
-->prefix('admin')
-->name('admin.')
-->group(function(){
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
 
-    Route::get('/dashboard',[AdminDashboardController::class,'index'])->name('dashboard');
+    /*
+    |--------------------------------------------------------------------------
+    | Dashboard
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])
+        ->name('dashboard');
 
-    // Clubs
-    Route::resource('clubs',AdminClubController::class);
-    Route::post('clubs/{club}/suspend',[AdminClubController::class,'suspend'])->name('clubs.suspend');
-    Route::post('clubs/{club}/activate',[AdminClubController::class,'activate'])->name('clubs.activate');
 
-    // Event Organizers
-    Route::resource('event-organizers',AdminEventOrganizerController::class);
-    Route::post('event-organizers/{eo}/suspend',[AdminEventOrganizerController::class,'suspend'])->name('event-organizers.suspend');
-    Route::post('event-organizers/{eo}/activate',[AdminEventOrganizerController::class,'activate'])->name('event-organizers.activate');
+    /*
+    |--------------------------------------------------------------------------
+    | Clubs
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('clubs', AdminClubController::class);
+    Route::post('clubs/{club}/suspend', [AdminClubController::class, 'suspend'])
+        ->name('clubs.suspend');
+    Route::post('clubs/{club}/activate', [AdminClubController::class, 'activate'])
+        ->name('clubs.activate');
 
-    // Tournaments
-    Route::get('tournaments',[AdminTournamentController::class,'index'])->name('tournaments.index');
-    Route::get('tournaments/{tournament}',[AdminTournamentController::class,'show'])->name('tournaments.show');
-    Route::post('tournaments/{tournament}/suspend',[AdminTournamentController::class,'suspend'])->name('tournaments.suspend');
-    Route::post('tournaments/{tournament}/activate',[AdminTournamentController::class,'activate'])->name('tournaments.activate');
 
-    // Users
-    Route::resource('users',AdminUserController::class);
-    Route::post('users/{user}/suspend',[AdminUserController::class,'suspend'])->name('users.suspend');
-    Route::post('users/{user}/activate',[AdminUserController::class,'activate'])->name('users.activate');
-    Route::post('users/{user}/reset-password',[AdminUserController::class,'resetPassword'])->name('users.resetPassword');
+    /*
+    |--------------------------------------------------------------------------
+    | Event Organizers (EO)
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('event-organizers', AdminEventOrganizerController::class);
 
-    // Players
-    Route::get('players',[AdminPlayerController::class,'index'])->name('players.index');
-    Route::get('players/{player}',[AdminPlayerController::class,'show'])->name('players.show');
-    Route::post('players/{player}/suspend',[AdminPlayerController::class,'suspend'])->name('players.suspend');
-    Route::post('players/{player}/activate',[AdminPlayerController::class,'activate'])->name('players.activate');
+    Route::post(
+        'event-organizers/{eventOrganizer}/approve',
+        [AdminEventOrganizerController::class, 'approve']
+    )->name('event-organizers.approve');
 
-    // Content
+    Route::post(
+        'event-organizers/{eventOrganizer}/reject',
+        [AdminEventOrganizerController::class, 'reject']
+    )->name('event-organizers.reject');
+
+    Route::post(
+        'event-organizers/{eventOrganizer}/suspend',
+        [AdminEventOrganizerController::class, 'suspend']
+    )->name('event-organizers.suspend');
+
+    Route::post(
+        'event-organizers/{eventOrganizer}/activate',
+        [AdminEventOrganizerController::class, 'activate']
+    )->name('event-organizers.activate');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tournaments
+    |--------------------------------------------------------------------------
+    */
+    Route::get('tournaments', [AdminTournamentController::class, 'index'])
+        ->name('tournaments.index');
+    Route::get('tournaments/{tournament}', [AdminTournamentController::class, 'show'])
+        ->name('tournaments.show');
+    Route::post('tournaments/{tournament}/suspend', [AdminTournamentController::class, 'suspend'])
+        ->name('tournaments.suspend');
+    Route::post('tournaments/{tournament}/activate', [AdminTournamentController::class, 'activate'])
+        ->name('tournaments.activate');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Users
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('users', AdminUserController::class);
+    Route::post('users/{user}/suspend', [AdminUserController::class, 'suspend'])
+        ->name('users.suspend');
+    Route::post('users/{user}/activate', [AdminUserController::class, 'activate'])
+        ->name('users.activate');
+    Route::post('users/{user}/reset-password', [AdminUserController::class, 'resetPassword'])
+        ->name('users.resetPassword');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Players
+    |--------------------------------------------------------------------------
+    */
+    Route::get('players', [AdminPlayerController::class, 'index'])
+        ->name('players.index');
+    Route::get('players/{player}', [AdminPlayerController::class, 'show'])
+        ->name('players.show');
+    Route::post('players/{player}/suspend', [AdminPlayerController::class, 'suspend'])
+        ->name('players.suspend');
+    Route::post('players/{player}/activate', [AdminPlayerController::class, 'activate'])
+        ->name('players.activate');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Content / Posts
+    |--------------------------------------------------------------------------
+    */
     Route::resource('posts', AdminPostController::class);
-    Route::post('posts/{post}/publish',[AdminPostController::class,'publish'])->name('posts.publish');
-    Route::post('posts/{post}/unpublish',[AdminPostController::class,'unpublish'])->name('posts.unpublish');
+    Route::post('posts/{post}/publish', [AdminPostController::class, 'publish'])
+        ->name('posts.publish');
+    Route::post('posts/{post}/unpublish', [AdminPostController::class, 'unpublish'])
+        ->name('posts.unpublish');
 
-    // Activity Logs
-    Route::get('activity-logs', [AdminActivityController::class,'index'])->name('activity.index');
 
-    // Banners (monitor only)
-    Route::get('banners',[AdminBannerController::class,'index'])->name('banners.index');
-    Route::post('banners/{banner}/approve',[AdminBannerController::class,'approve'])->name('banners.approve');
-    Route::post('banners/{banner}/disable',[AdminBannerController::class,'disable'])->name('banners.disable');
+    /*
+    |--------------------------------------------------------------------------
+    | Activity Logs
+    |--------------------------------------------------------------------------
+    */
+    Route::get('activity-logs', [AdminActivityController::class, 'index'])
+        ->name('activity.index');
 
-    Route::resource('banners',AdminBannerController::class)->except(['show']);
 
-    Route::resource('admin/kta-backgrounds', AdminKtaBackgroundController::class);
+    /*
+    |--------------------------------------------------------------------------
+    | Banners
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('banners', AdminBannerController::class)->except(['show']);
+    Route::post('banners/{banner}/approve', [AdminBannerController::class, 'approve'])
+        ->name('banners.approve');
+    Route::post('banners/{banner}/disable', [AdminBannerController::class, 'disable'])
+        ->name('banners.disable');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | KTA Backgrounds
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('kta-backgrounds', AdminKtaBackgroundController::class);
 
 });
 
@@ -175,8 +264,14 @@ Route::middleware(['auth','status','role:club'])
     Route::get('/profile',[ClubProfileController::class,'edit'])->name('profile');
     Route::put('/profile',[ClubProfileController::class,'update'])->name('profile.update');
 
-    Route::get('tournaments',[ClubTournamentController::class,'index'])->name('tournaments.index');
-    Route::post('tournaments/{tournament}/register',[ClubTournamentController::class,'register'])->name('tournaments.register');
+    Route::get('/tournaments', [ClubTournamentController::class, 'index'])
+        ->name('tournaments.index');
+
+    Route::get('/tournaments/{tournament}', [ClubTournamentController::class, 'show'])
+        ->name('tournaments.show');
+
+    Route::post('/tournaments/{tournament}/register', [ClubTournamentController::class, 'register'])
+        ->name('tournaments.register');
 
     Route::resource('players',PlayerController::class);
 
@@ -210,57 +305,171 @@ use App\Http\Controllers\EO\{
     KnockoutController,
     MatchListController,
     KnockoutViewController,
-    BannerController
+    BannerController,
+    DashboardController
 };
 
 Route::middleware(['auth','status','role:eo'])
-->prefix('eo')
-->name('eo.')
-->group(function(){
+    ->prefix('eo')
+    ->name('eo.')
+    ->group(function () {
 
-    Route::get('/dashboard', fn()=>view('eo.dashboard'))->name('dashboard');
+    /*
+    |--------------------------------------------------------------------------
+    | Dashboard
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
 
-    Route::resource('tournaments',TournamentController::class);
-    Route::post('tournaments/{tournament}/publish',[TournamentController::class,'publish'])->name('tournaments.publish');
-    Route::post('tournaments/{tournament}/close',[TournamentController::class,'close'])->name('tournaments.close');
 
-    Route::get('tournaments/{tournament}/participants',[ParticipantController::class,'index'])->name('tournaments.participants');
-    Route::post('registrations/{registration}/approve',[ParticipantController::class,'approve'])->name('registrations.approve');
-    Route::post('registrations/{registration}/reject',[ParticipantController::class,'reject'])->name('registrations.reject');
+    /*
+    |--------------------------------------------------------------------------
+    | Tournaments
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('tournaments', TournamentController::class);
 
-    Route::get('tournaments/{tournament}/groups',[GroupController::class,'index'])->name('tournaments.groups');
-    Route::post('tournaments/{tournament}/groups/auto',[GroupController::class,'autoGenerate'])->name('groups.auto');
-    Route::post('groups/{group}/add-club',[GroupController::class,'addClub'])->name('groups.addClub');
-    Route::post('groups/{group}/remove-club',[GroupController::class,'removeClub'])->name('groups.removeClub');
+    Route::post('tournaments/{tournament}/publish',
+        [TournamentController::class,'publish'])
+        ->name('tournaments.publish');
 
-    Route::post('tournaments/{tournament}/generate-matches',[MatchGeneratorController::class,'generateGroupMatches'])->name('tournaments.generateMatches');
+    Route::post('tournaments/{tournament}/close',
+        [TournamentController::class,'close'])
+        ->name('tournaments.close');
 
-    Route::get('matches/{match}/edit',[MatchController::class,'edit'])->name('matches.edit');
-    Route::put('matches/{match}',[MatchController::class,'update'])->name('matches.update');
+    Route::get('/tournaments/{tournament}/edit', [TournamentController::class, 'edit'])
+        ->name('tournaments.edit');
 
-    Route::get('tournaments/{tournament}/standings',[StandingController::class,'index'])->name('tournaments.standings');
+    Route::put('/tournaments/{tournament}', [TournamentController::class, 'update'])
+        ->name('tournaments.update');
 
-    Route::post('tournaments/{tournament}/generate-knockout',[KnockoutController::class,'generate'])->name('tournaments.generateKnockout');
-    Route::post('tournaments/{tournament}/generate-next-stage',[KnockoutController::class,'generateNext'])->name('tournaments.generateNextStage');
 
-    Route::get('tournaments/{tournament}/matches',[MatchListController::class,'index'])->name('tournaments.matches');
-    Route::get('tournaments/{tournament}/knockout',[KnockoutViewController::class,'index'])->name('tournaments.knockout');
+    /*
+    |--------------------------------------------------------------------------
+    | Participants / Registrations
+    |--------------------------------------------------------------------------
+    */
+    Route::get('tournaments/{tournament}/participants',
+        [ParticipantController::class,'index'])
+        ->name('tournaments.participants');
 
-    // Tournament Banners
-    Route::get('tournaments/{tournament}/banners',[BannerController::class,'index'])->name('tournaments.banners');
-    Route::post('tournaments/{tournament}/banners',[BannerController::class,'store'])->name('tournaments.banners.store');
-    Route::post('banners/{banner}/toggle',[BannerController::class,'toggle'])->name('banners.toggle');
+    Route::post('registrations/{registration}/approve',
+        [ParticipantController::class,'approve'])
+        ->name('registrations.approve');
 
-    //Formasi tiap Club
-    Route::get('lineups',[EOFormasiController::class,'index'])->name('eo.lineups.index');
-    Route::get('lineups/{lineup}',[EOFormasiController::class,'show'])->name('eo.lineups.show');
-    Route::post('lineups/{lineup}/approve',[EOFormasiController::class,'approve'])
-    ->name('eo.lineups.approve');
-    Route::post('lineups/{lineup}/request',[EOFormasiController::class,'requestRevision'])
-    ->name('eo.lineups.request');
+    Route::post('registrations/{registration}/reject',
+        [ParticipantController::class,'reject'])
+        ->name('registrations.reject');
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Groups
+    |--------------------------------------------------------------------------
+    */
+    Route::get('tournaments/{tournament}/groups',
+        [GroupController::class,'index'])
+        ->name('tournaments.groups');
+
+    Route::post('tournaments/{tournament}/groups/auto',
+        [GroupController::class,'autoGenerate'])
+        ->name('groups.auto');
+
+    Route::post('groups/{group}/add-club',
+        [GroupController::class,'addClub'])
+        ->name('groups.addClub');
+
+    Route::post('groups/{group}/remove-club',
+        [GroupController::class,'removeClub'])
+        ->name('groups.removeClub');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Matches
+    |--------------------------------------------------------------------------
+    */
+    Route::post('tournaments/{tournament}/generate-matches',
+        [MatchGeneratorController::class,'generateGroupMatches'])
+        ->name('tournaments.generateMatches');
+
+    Route::get('matches/{match}/edit',
+        [MatchController::class,'edit'])
+        ->name('matches.edit');
+
+    Route::put('matches/{match}',
+        [MatchController::class,'update'])
+        ->name('matches.update');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Standings & Knockout
+    |--------------------------------------------------------------------------
+    */
+    Route::get('tournaments/{tournament}/standings',
+        [StandingController::class,'index'])
+        ->name('tournaments.standings');
+
+    Route::post('tournaments/{tournament}/generate-knockout',
+        [KnockoutController::class,'generate'])
+        ->name('tournaments.generateKnockout');
+
+    Route::post('tournaments/{tournament}/generate-next-stage',
+        [KnockoutController::class,'generateNext'])
+        ->name('tournaments.generateNextStage');
+
+    Route::get('tournaments/{tournament}/matches',
+        [MatchListController::class,'index'])
+        ->name('tournaments.matches');
+
+    Route::get('tournaments/{tournament}/knockout',
+        [KnockoutViewController::class,'index'])
+        ->name('tournaments.knockout');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tournament Banners
+    |--------------------------------------------------------------------------
+    */
+    Route::get('tournaments/{tournament}/banners',
+        [BannerController::class,'index'])
+        ->name('tournaments.banners');
+
+    Route::post('tournaments/{tournament}/banners',
+        [BannerController::class,'store'])
+        ->name('tournaments.banners.store');
+
+    Route::post('banners/{banner}/toggle',
+        [BannerController::class,'toggle'])
+        ->name('banners.toggle');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Lineups (Formasi Club)
+    |--------------------------------------------------------------------------
+    */
+    Route::get('lineups',
+        [EOFormasiController::class,'index'])
+        ->name('lineups.index');
+
+    Route::get('lineups/{lineup}',
+        [EOFormasiController::class,'show'])
+        ->name('lineups.show');
+
+    Route::post('lineups/{lineup}/approve',
+        [EOFormasiController::class,'approve'])
+        ->name('lineups.approve');
+
+    Route::post('lineups/{lineup}/request',
+        [EOFormasiController::class,'requestRevision'])
+        ->name('lineups.request');
 
 });
+
 
 
 Route::get('/gd', function(){

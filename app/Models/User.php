@@ -36,7 +36,7 @@ class User extends Authenticatable
 
     public function eventOrganizer()
     {
-        return $this->belongsTo(EventOrganizer::class);
+        return $this->hasOne(EventOrganizer::class);
     }
 
 

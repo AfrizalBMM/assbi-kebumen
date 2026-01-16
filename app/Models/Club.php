@@ -43,5 +43,11 @@ class Club extends Model
         )->withPivot('status')->withTimestamps();
     }
 
+    public function getLogoUrlAttribute()
+    {
+        return $this->logo
+            ? asset('storage/'.$this->logo)
+            : asset('assets/noimage.jpg');
+    }
 
 }

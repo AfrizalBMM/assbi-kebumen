@@ -50,7 +50,7 @@
                         {{ $tournament->category }}
                     </td>
                     <td class="px-6 py-3 text-muted">
-                        {{ $tournament->mainEO->name }}
+                        {{ $tournament->mainEO?->name ?? '-' }}
                     </td>
                     <td class="px-6 py-3 text-center">
                         <span class="px-3 py-1 rounded-full text-xs font-semibold

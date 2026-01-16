@@ -40,7 +40,7 @@
 
         <div>
             <p class="text-xs text-muted">EO Utama</p>
-            <p class="font-semibold">{{ $tournament->eventOrganizer->name }}</p>
+            <p class="font-semibold">{{ $tournament->eventOrganizer?->name ?? '-' }}</p>
         </div>
 
         <div>

@@ -15,8 +15,25 @@
 </div>
 
 <div class="mb-3">
-    <label class="text-sm">Kategori (U10, U12, dll)</label>
-    <input name="category" class="w-full border rounded px-3 py-2" required>
+    <label class="text-sm font-medium text-slate-700">
+        Kategori Usia
+    </label>
+
+    <select name="category"
+            required
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-primary focus:border-primary">
+        <option value="">-- Pilih Kategori Usia --</option>
+
+        @foreach(config('age_categories') as $label => $range)
+            <option value="{{ $label }}">
+                {{ $label }} ({{ $range['min'] }}–{{ $range['max'] }} Tahun)
+            </option>
+        @endforeach
+    </select>
+
+    <p class="text-xs text-muted mt-1">
+        Usia dihitung berdasarkan tanggal lahir pemain
+    </p>
 </div>
 
 <div class="grid grid-cols-2 gap-4 mb-3">
@@ -40,10 +57,33 @@
         <label class="text-sm">Max Peserta</label>
         <input type="number" name="max_participants" class="w-full border rounded px-3 py-2">
     </div>
-    <div>
-        <label class="text-sm">Biaya Pendaftaran</label>
-        <input type="number" name="registration_fee" class="w-full border rounded px-3 py-2">
+    <div class="mb-3">
+        <label class="text-sm font-medium text-slate-700">
+            Biaya Pendaftaran
+        </label>
+
+        <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">
+                Rp
+            </span>
+
+            <input type="text"
+                id="registration_fee_display"
+                class="w-full border border-gray-300 rounded-lg pl-10 pr-3 py-2 text-sm focus:ring-primary focus:border-primary"
+                placeholder="0"
+                inputmode="numeric"
+                autocomplete="off">
+
+            <input type="hidden"
+                name="registration_fee"
+                id="registration_fee">
+        </div>
+
+        <p class="text-xs text-muted mt-1">
+            Kosongkan atau isi 0 jika gratis
+        </p>
     </div>
+
 </div>
 
 <div class="mb-3">
@@ -63,3 +103,24 @@
 </button>
 </form>
 @endsection
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const displayInput = document.getElementById('registration_fee_display');
+    const hiddenInput  = document.getElementById('registration_fee');
+
+    function formatRupiah(value) {
+        value = value.replace(/\D/g, '');
+        return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    displayInput.addEventListener('input', function () {
+        const raw = this.value.replace(/\D/g, '');
+        this.value = formatRupiah(raw);
+        hiddenInput.value = raw;
+    });
+});
+</script>
+@endpush
+
+

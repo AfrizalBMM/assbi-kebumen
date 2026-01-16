@@ -24,8 +24,17 @@
 
         <div class="space-y-3">
             <div>
-                <p class="text-xs text-muted">Email</p>
-                <p class="font-medium">{{ $club->email ?? '-' }}</p>
+                <p class="text-xs text-muted mb-1">Email</p>
+
+                <div class="flex items-center gap-3">
+                    <img src="{{ $club->logo_url }}"
+                        alt="Logo {{ $club->name }}"
+                        class="w-10 h-10 rounded-full object-cover border border-gray-200">
+
+                    <p class="font-medium text-slate-800">
+                        {{ $club->email ?? '-' }}
+                    </p>
+                </div>
             </div>
 
             <div>

@@ -13,7 +13,7 @@
 </h2>
 
 <form method="POST"
-      action="{{ route('admin.event-organizers.update',$eo) }}">
+      action="{{ route('admin.event-organizers.update',$eventOrganizer) }}">
 @csrf
 @method('PUT')
 
@@ -22,7 +22,7 @@
     <div>
         <label class="text-sm text-muted">Nama EO</label>
         <input name="name"
-               value="{{ $eo->name }}"
+               value="{{ $eventOrganizer->name }}"
                class="w-full mt-1 border border-gray-200 rounded-lg px-4 py-2 focus:ring-primary focus:border-primary"
                required>
     </div>
@@ -30,21 +30,21 @@
     <div>
         <label class="text-sm text-muted">Contact Person</label>
         <input name="contact_person"
-               value="{{ $eo->contact_person }}"
+               value="{{ $eventOrganizer->contact_person }}"
                class="w-full mt-1 border border-gray-200 rounded-lg px-4 py-2 focus:ring-primary focus:border-primary">
     </div>
 
     <div>
         <label class="text-sm text-muted">Email</label>
         <input name="email"
-               value="{{ $eo->email }}"
+               value="{{ $eventOrganizer->email }}"
                class="w-full mt-1 border border-gray-200 rounded-lg px-4 py-2 focus:ring-primary focus:border-primary">
     </div>
 
     <div>
         <label class="text-sm text-muted">Telepon</label>
         <input name="phone"
-               value="{{ $eo->phone }}"
+               value="{{ $eventOrganizer->phone }}"
                class="w-full mt-1 border border-gray-200 rounded-lg px-4 py-2 focus:ring-primary focus:border-primary">
     </div>
 
@@ -52,13 +52,13 @@
         <label class="text-sm text-muted">Alamat</label>
         <textarea name="address"
                   rows="3"
-                  class="w-full mt-1 border border-gray-200 rounded-lg px-4 py-2 focus:ring-primary focus:border-primary">{{ $eo->address }}</textarea>
+                  class="w-full mt-1 border border-gray-200 rounded-lg px-4 py-2 focus:ring-primary focus:border-primary">{{ $eventOrganizer->address }}</textarea>
     </div>
 
 </div>
 
 <div class="flex justify-end gap-3 mt-6">
-    <a href="{{ route('admin.event-organizers.show',$eo) }}"
+    <a href="{{ route('admin.event-organizers.show',$eventOrganizer) }}"
        class="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200">
         Batal
     </a>

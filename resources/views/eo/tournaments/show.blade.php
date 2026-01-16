@@ -23,11 +23,13 @@
       action="{{ route('eo.tournaments.publish',$tournament) }}"
       class="mt-4">
     @csrf
-    <button class="bg-green-600 text-white px-4 py-2 rounded">
+    <button class="bg-success text-white px-4 py-2 rounded-lg font-semibold">
         Publish Turnamen
     </button>
 </form>
 @endif
+
+
 
 </div>
 @endsection
